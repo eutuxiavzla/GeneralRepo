@@ -24,8 +24,10 @@ Auth::routes();
 
 /*---------------Login --------------*/
 Route::get('/admin', 'Cms\LoginController@index');
+
 //Metodo posts
 Route::post('/cms/login', 'Cms\LoginController@login')->name('login.admin');
+Route::post('/admin/logout', 'Cms\LoginController@logout')->name('login.logout');
 
 //CMS
 Route::middleware('admin')->group(function () {

@@ -8,7 +8,7 @@
     <h2>Usuarios de la administración</h2>
     <hr>
     <section class="container-fluid">
-        <form action="{{ route('cms.users.create') }}" method="POST" autocomplete="off">
+        <form action="{{ route('cms.users.create') }}" id="form_create_user" method="POST" autocomplete="off">
             @csrf
             <div class="row">
                 <h4 class="col-12">Crear usuarios</h4>
@@ -27,17 +27,19 @@
                     </select>
                 </div>
                 <div class="col-md-4 form-group px-1">
-                    <input class="form-control" type="password" name="password" placeholder="Contraseña"
+                    <input class="form-control" type="password" id="contraseña" name="password" placeholder="Contraseña"
                         autocomplete="off" required>
+                    <a href="#"><small class="inactive pass_watcher">Ver contraseña</small></a>
                 </div>
                 <div class="col-md-4 form-group px-1">
-                    <input class="form-control" type="password" name="password2" placeholder="Confirmar contraseña"
+                    <input class="form-control" type="password" id="confirmar_contraseña" name="password2" placeholder="Confirmar contraseña"
                         autocomplete="off" required>
+                    <a href="#"><small class="inactive pass_watcher">Ver contraseña</small></a>
                 </div>
             </div>
             <div class="row form-group px-1">
-                <input type="submit" class="btn btn-sm btn-primary px-5" value="Crear">
-                <small id="emailHelp" class="form-text text-danger col-12 px-1">Las contraseñas no coinciden.</small>
+                <input type="submit" id="crear_user_submit" class="btn btn-sm btn-primary px-5" value="Crear">
+                <small id="emailHelp" style="display: none;" class="form-text text-danger col-12 px-1">Las contraseñas no coinciden.</small>
             </div>
         </form>
 
@@ -64,7 +66,7 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                <button type="button" id="{{ $user->id }}" class="btn btn-sm btn-info" data-toggle="modal"
+                                <button type="button" id="{{ $user->id }}" class="btn btn-sm btn-info change_pass" data-toggle="modal"
                                     data-target="#modalContraseña">Editar Contraseña</button>
                                 <button type="button" id="{{ $user->id }}" class="btn btn-sm btn-primary editar"
                                     data-toggle="modal" data-target="#modalEditar">Editar</button>
@@ -122,12 +124,15 @@
                         @csrf
                         <div class="form-group">
                             <h5>Nueva Contraseña</h5>
-                            <input class="form-control" type="password" name="password">
+                            <input class="form-control" id="modal_password" type="password" name="password">
+                            <a href="#"><small class="inactive modal_change_input">Ver contraseña</small></a>
                         </div>
                         <div class="form-group">
                             <h5>Confirmar Contraseña</h5>
-                            <input class="form-control" type="password" name="corfirm_password">
+                            <input class="form-control" id="modal_password_confirm" type="password" name="corfirm_password">
+                            <a href="#"><small class="inactive modal_change_input">Ver contraseña</small></a>
                         </div>
+                        <small id="modal_password_verify" style="display: none;" class="form-text text-danger col-12 px-1">Las contraseñas no coinciden.</small>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -147,9 +152,10 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-					El usuario XXXXXXXXXX sera eliminado. <br>
-					¿Esta seguro que desea eliminarlo?
+                <div class="modal-body" >
+                    <div id="eliminar_user">
+                        
+                    </div>
                     <form action="" id="eliminar_form" method="POST">
                         @csrf
                     </form>
@@ -163,13 +169,97 @@
     </div>
 
     <script type="text/javascript">
+        let passChange = document.querySelectorAll('.pass_watcher');
+
+        let modalPassChange = document.querySelectorAll('.modal_change_input');
+
+
+
+
+
+        modalPassChange.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                let inputPass = e.target.parentNode.parentNode.children[1];
+                let accion = e.target;
+
+
+
+                if(accion.classList.contains('inactive'))
+                {
+                    inputPass.type = "text"
+                    accion.classList.remove('inactive')
+                    accion.classList.add('active')
+
+                    accion.textContent = 'Ocultar contraseña';
+                } else if(accion.classList.contains('active')) {
+                    inputPass.type = "password"
+                    accion.classList.remove('active')
+                    accion.classList.add('inactive')
+
+                    accion.textContent = 'Ver contraseña';
+                }
+            });
+        });
+
+
+        passChange.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                let inputPass = e.target.parentNode.parentNode.children[0];
+                let accion = e.target;
+
+
+                if(accion.classList.contains('inactive'))
+                {
+                    inputPass.type = "text"
+                    accion.classList.remove('inactive')
+                    accion.classList.add('active')
+
+                    accion.textContent = 'Ocultar contraseña';
+                } else if(accion.classList.contains('active')) {
+                    inputPass.type = "password"
+                    accion.classList.remove('active')
+                    accion.classList.add('inactive')
+
+                    accion.textContent = 'Ver contraseña';
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
         let editarButtons = document.querySelectorAll('.editar');
-        let passButtons = document.querySelectorAll('.contraseña');
+        let passButtons = document.querySelectorAll('.change_pass');
         let eliminarButtons = document.querySelectorAll('.eliminar');
 
         let editarSubmit = document.getElementById('editar_submit');
         let passSubmit = document.getElementById('contraseña_submit');
         let deleteSubmit = document.getElementById('eliminar_submit');
+
+
+        //--------------SUBMIT CREAR USUARIOS ------------
+
+        let alert_passwords = document.getElementById('emailHelp');
+        let submitUserCreate = document.getElementById('crear_user_submit');
+
+        submitUserCreate.addEventListener('click', (e) => {
+            e.preventDefault();
+            let password = document.getElementById('contraseña')
+            let password_confirm = document.getElementById('confirmar_contraseña')
+            let form = document.getElementById('form_create_user');
+
+            if(password.value == password_confirm.value)
+            {
+                console.log('entrar');
+                form.submit();
+            } else {
+                alert_passwords.style.display = 'block';
+            }
+
+        });
+
 
 
         deleteSubmit.addEventListener('click', (e) => {
@@ -180,8 +270,16 @@
 
         passSubmit.addEventListener('click', (e) => {
             let form = document.getElementById('contraseña_form')
+            let password_modal = document.getElementById('modal_password')
+            let password_confirm_modal = document.getElementById('modal_password_confirm');
+            let verify_modal_password = document.getElementById('modal_password_verify')
 
-            form.submit();
+
+            if(password_modal.value === password_confirm_modal.value){
+                form.submit();
+            } else {
+                verify_modal_password.style.display = 'block';
+            }
         });
 
         editarSubmit.addEventListener('click', (e) => {
@@ -211,6 +309,15 @@
         if (eliminarButtons) {
             eliminarButtons.forEach(buttons => {
                 buttons.addEventListener('click', (e) => {
+
+                    let eliminar_user = document.getElementById('eliminar_user');
+                    let user_info = e.target.parentNode.parentNode.children[1].textContent
+
+                    eliminar_user.innerHTML = `
+                        El usuario <strong>${user_info}</strong> sera eliminado. <br>
+                        ¿Esta seguro que desea eliminarlo?
+                    `
+
                     let id = e.target.id
                     getUser(id, 'eliminar');
                 });

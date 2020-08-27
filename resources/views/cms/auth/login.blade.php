@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@section('captcha')
+    {!! htmlScriptTagJsApi([
+        'action' => 'homepage'
+    ]) !!}
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -35,7 +41,7 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-                                <a href=""><small>Ver Contraseña</small></a>
+                                <a href="#"><small class="inactive" id="password_change">Ver Contraseña</small></a>
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -69,4 +75,31 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    let passInput = document.getElementById('password');
+    let change = document.getElementById('password_change');
+
+    change.addEventListener('click', (e) => {
+        let elemento = e.target
+
+        if(elemento.classList.contains('inactive'))
+        {
+            elemento.classList.remove('inactive')
+            elemento.classList.add('active')
+
+            passInput.type = "text"
+            elemento.textContent = 'Ocultar contraseña';
+
+
+        } else if(elemento.classList.contains('active')){
+            elemento.classList.remove('active')
+            elemento.classList.add('inactive')
+
+            passInput.type = "password"
+
+            elemento.textContent = 'Ver contraseña';
+        }
+    });
+</script>
 @endsection

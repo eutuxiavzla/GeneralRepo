@@ -30,7 +30,7 @@
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{{ route('cms.home') }}">Dashboard</a>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <form action="/logout" method="POST" id="form_salir_sesion">
+                <form action="{{route('login.logout')}}" method="POST" id="form_salir_sesion">
                     @csrf
                     <a class="nav-link" onclick="cerrarSesion()" href="#">Sign out</a>
                 </form>
@@ -39,6 +39,26 @@
     </nav>
     <div class="container-fluid">
         <div class="row">
+
+            <!-- Navbar movil -->
+            <nav class="navbar navbar-expand-lg navbar-light d-md-none mt-5 bg-light col-12">
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('cms.users') }}">
+                        <span data-feather="file"></span>
+                        Usuarios
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+
+
+            <!-- Navbar Desktop -->
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
