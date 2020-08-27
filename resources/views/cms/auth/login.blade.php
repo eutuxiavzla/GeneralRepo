@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Iniciar Sesión administrador') }}</div>
+                <div class="card-header">{{ __('Inicio de sesión administrador') }}</div>
 
                 <div class="card-body">
                     @if(session('message'))
@@ -35,7 +35,7 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
+                                <a href=""><small>Ver Contraseña</small></a>
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
