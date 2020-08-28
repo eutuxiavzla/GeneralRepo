@@ -13,17 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
-Route::get('/landing', 'HomeController@lading')->name('landing');
+Route::get('/', 'HomeController@lading')->name('home');
 
 Auth::routes();
-
-
-
 
 /*---------------Login --------------*/
 Route::get('/admin', 'Cms\LoginController@index');
@@ -32,25 +24,14 @@ Route::get('/admin', 'Cms\LoginController@index');
 Route::post('/cms/login', 'Cms\LoginController@login')->name('login.admin');
 Route::post('/admin/logout', 'Cms\LoginController@logout')->name('login.logout');
 
-
-
-
-
-
 /*---------------CMS ACCESO --------------*/
 
 Route::middleware('cms')->group(function () {
 	Route::get('/cms', 'Cms\IndexController@index')->name('cms.home');
 });
 
-
-
-
 /*---------------ADMINISTRADORES --------------*/
-
-
 Route::middleware('admin')->group(function () {
-
 	/*---------------Usuarios --------------*/
 		Route::get('/cms/admin_users', 'Cms\IndexController@adminUsers')->name('cms.users');
 		Route::get('/cms/get/user/{id}', 'Cms\UserController@getUser');
@@ -61,8 +42,7 @@ Route::middleware('admin')->group(function () {
 		Route::post('/cms/eliminar/user/{id}', 'Cms\UserController@eliminarUsuario');
 });
 
-/*---------------EDITORES LANDING PAGE --------------*/
-
+/*---------------EDITORES LANDING PAGE CMS--------------*/
 Route::middleware('landing')->group(function () {
 	
 	Route::get('/cms/banners', 'Cms\LogoBannerController@index')->name('banners.home');

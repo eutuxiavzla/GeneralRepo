@@ -101,7 +101,7 @@
                           </a>
                           <ul class="acordeon_container">
                             <li class="acordeon_item">
-                              <a href="{{route('banners.home')}}" class="nav-link">Banners</a>
+                              <a href="{{route('banners.home')}}" class="nav-link">Home</a>
                             </li>
                           </ul>
                         </li>
