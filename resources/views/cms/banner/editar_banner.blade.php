@@ -123,8 +123,14 @@
         <div class="alert alert-success my-4" role="alert">
             {{ session('message') }}
         </div>
-    @endif
-    <h3>Editar Banner</h3>
+	@endif
+	<section class="containet">
+		<div class="row">
+			<div class="col-auto"><h3>Editar Banner</h3></div>
+			<div class="col-auto ml-auto"><a class="btn btn-outline-info btn-sm px-5" href="{{ route('banners.home') }}">Volver</a></div>
+		</div>
+	</section>
+    
     <section class="my-3" id="container">
         <div class="banner_container">
             <img class="banner_imagen" id="image_fondo" src="{{ asset('storage/' . $banner->image) }}">
