@@ -23,6 +23,27 @@
 
     <!-- Axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <style type="text/css">
+
+        .acordeon_container{
+            max-height: 0;
+            overflow: hidden;
+            transition: all .4s linear;
+        }
+
+        .acordeon_item{
+            list-style: none;
+            
+        }
+
+        .nav-item:hover .acordeon_container{
+          max-height: 20rem;
+        }
+
+    </style>
+
+
 </head>
 
 <body>
@@ -53,6 +74,7 @@
                         Usuarios
                     </a>
                   </li>
+
                 </ul>
               </div>
             </nav>
@@ -62,12 +84,28 @@
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
+                        @if(auth()->user()->roles->title == 'administrador')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('cms.users') }}">
                                 <span data-feather="file"></span>
                                 Usuarios
                             </a>
                         </li>
+                        @endif
+
+                        @if(auth()->user()->roles->title == 'editor' || auth()->user()->roles->title == 'administrador')
+                        <li class="nav-item items">
+                          <a class="nav-link" href="#">
+                            <span data-feather="file"></span>
+                            Pagina web
+                          </a>
+                          <ul class="acordeon_container">
+                            <li class="acordeon_item">
+                              <a href="{{route('banners.home')}}" class="nav-link">Banners</a>
+                            </li>
+                          </ul>
+                        </li>
+                        @endif
                     </ul>
                 </div>
             </nav>

@@ -1,0 +1,166 @@
+@extends('cms.layout.main')	
+@section('title')
+	Crear Banner
+@endsection
+
+
+@section('content')
+
+<style type="text/css">
+	.banner_container{
+		position: relative;
+		width: 100%;
+		height: 70vh;
+		background-color: black;
+	}
+
+	.banner_imagen{
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.inputs{
+		position: absolute;
+		top: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	.button_select{
+		position: relative;
+		left: 100%;
+		transform: translateX(-100%);
+		cursor: pointer;
+	}
+
+	.input_file{
+		position: absolute;
+		top: 0;
+		right: 0;
+		opacity: 0;
+		height: 50px;
+		cursor: pointer;
+	}
+
+	.inputs_body{
+
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center; 
+	}
+
+
+	.options_buttons{
+		width: 50%;
+		margin: 0 auto;
+	}
+</style>
+	
+	<div class="alert alert-danger" style="display: none;" id="errors_main">
+		
+	</div>
+
+	@if(session('message'))
+	    <div class="alert alert-success my-4" role="alert">
+	      {{session('message')}}
+	    </div>
+	@endif
+	<h1>Crear Nuevo Banner</h1>
+	<section class="my-3" id="container">
+		<div class="banner_container">
+			<img class="banner_imagen" id="image_fondo" src="">
+			<form action="{{route('banners.store')}}" class="inputs" id="form"  method="POST" enctype="multipart/form-data">
+				@csrf
+				<input type="hidden" name="tipo" value="banner">
+				<input type="hidden" name="status" value="1">
+				<div class="d-flex">
+					<button type="button" class="btn btn-success button_select" >
+						Agregar
+					</button>
+				</div>
+				<input type="file" id="file" name="image" class="input_file">
+				<div class="inputs_body">
+					<input class="form-control mb-5" maxlength="191" style="width: 50%;" id="i_title" type="text" name="title" placeholder="Titulo">
+					<textarea class="form-control" name="description" style="width: 50%;" id="i_description" placeholder="Descripción"></textarea>
+				</div>
+			</form>
+		</div>
+
+		<div class="d-flex justify-content-center my-3 ">
+			<button type="button" id="button_submit" class="btn btn-success mr-5">Crear</button>
+			<a href="{{route('banners.home')}}" class="btn btn-outline-success">Volver</a>
+		</div>
+	</section>
+
+
+	<script type="text/javascript">
+		let title = document.getElementById('i_title'),
+			description = document.getElementById('i_description'),
+			submit = document.getElementById('button_submit'),
+			image = document.getElementById('image_fondo'),
+			inputFile = document.querySelectorAll('.input_file'),
+			form = document.getElementById('form'),
+			file = document.getElementById('file')
+			container = document.getElementById('container');
+
+
+		inputFile.forEach(input => {
+		  input.onchange = function (e){
+		    
+		    let reader = new FileReader();
+		    reader.readAsDataURL(e.target.files[0]);
+
+		    reader.onload = function (){
+		      image.src = reader.result;
+		    }
+
+		  }
+		});
+
+
+		submit.addEventListener('click', (e) => {
+			let errors = []
+			let container_errors = document.getElementById('errors_main');
+
+			container_errors.innerHTML = '';
+			container_errors.style.display = 'none';
+
+
+			if(title.value === ''){
+				errors.push('Debes agregar un titulo');
+			} 
+
+			if(description.value === ''){
+				errors.push('Debes agregar una descripción');
+			}  
+
+			if (file.files.length <= 0){
+				errors.push('Debes agregar una imagen');
+			}
+
+
+			if(errors.length > 0)
+			{
+				let alerta_main = document.createElement('ul')
+
+				errors.forEach(error => {
+					alerta_main.innerHTML += `
+						<li> ${error} </li>
+					`
+				});
+
+				container_errors.appendChild(alerta_main)
+				container_errors.style.display = 'block';	
+			} else {
+				form.submit();
+			}
+
+			
+		});
+	</script>
+@endsection
