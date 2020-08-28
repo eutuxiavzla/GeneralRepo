@@ -32,42 +32,53 @@
                     <a href="#"><small class="inactive pass_watcher">Ver contraseña</small></a>
                 </div>
                 <div class="col-md-4 form-group px-1">
-                    <input class="form-control" type="password" id="confirmar_contraseña" name="password2" placeholder="Confirmar contraseña"
-                        autocomplete="off" required>
+                    <input class="form-control" type="password" id="confirmar_contraseña" name="password2"
+                        placeholder="Confirmar contraseña" autocomplete="off" required>
                     <a href="#"><small class="inactive pass_watcher">Ver contraseña</small></a>
                 </div>
             </div>
             <div class="row form-group px-1">
                 <input type="submit" id="crear_user_submit" class="btn btn-sm btn-primary px-5" value="Crear">
-                <small id="emailHelp" style="display: none;" class="form-text text-danger col-12 px-1">Las contraseñas no coinciden.</small>
+                <small id="emailHelp" style="display: none;" class="form-text text-danger col-12 px-1">Las contraseñas no
+                    coinciden.</small>
             </div>
         </form>
+        <div class="row align-items-center">
+            @if (session('message'))
+                <div class="alert alert-success" role="alert">
+                    <small>{{ session('message') }}</small>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
 
-        @if (session('message'))
-            <div class="alert alert-success" role="alert">
-                {{ session('message') }}
-            </div>
-        @endif
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    <small>{{ session('error') }}</small>
+                    <button type="button" class="close ml-4" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div>
 
-        @if (session('error'))
-            <div class="alert alert-danger" role="alert">
-                {{ session('error') }}
-            </div>
-        @endif
         <hr>
         <section class="mt-4">
-            <table>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Acciones</th>
+            <table id="table1" style="width:100%;">
+                <thead>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                </thead>
                 <tbody>
                     @foreach ($usuarios as $user)
                         <tr>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                <button type="button" id="{{ $user->id }}" class="btn btn-sm btn-info change_pass" data-toggle="modal"
-                                    data-target="#modalContraseña">Editar Contraseña</button>
+                                <button type="button" id="{{ $user->id }}" class="btn btn-sm btn-info change_pass"
+                                    data-toggle="modal" data-target="#modalContraseña">Editar Contraseña</button>
                                 <button type="button" id="{{ $user->id }}" class="btn btn-sm btn-primary editar"
                                     data-toggle="modal" data-target="#modalEditar">Editar</button>
                                 <button type="button" id="{{ $user->id }}" class="btn btn-sm btn-danger eliminar"
@@ -79,6 +90,7 @@
             </table>
         </section>
     </section>
+
 
     <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -132,7 +144,8 @@
                             <input class="form-control" id="modal_password_confirm" type="password" name="corfirm_password">
                             <a href="#"><small class="inactive modal_change_input">Ver contraseña</small></a>
                         </div>
-                        <small id="modal_password_verify" style="display: none;" class="form-text text-danger col-12 px-1">Las contraseñas no coinciden.</small>
+                        <small id="modal_password_verify" style="display: none;"
+                            class="form-text text-danger col-12 px-1">Las contraseñas no coinciden.</small>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -152,9 +165,9 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" >
+                <div class="modal-body">
                     <div id="eliminar_user">
-                        
+
                     </div>
                     <form action="" id="eliminar_form" method="POST">
                         @csrf
@@ -173,10 +186,6 @@
 
         let modalPassChange = document.querySelectorAll('.modal_change_input');
 
-
-
-
-
         modalPassChange.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -184,16 +193,13 @@
                 let inputPass = e.target.parentNode.parentNode.children[1];
                 let accion = e.target;
 
-
-
-                if(accion.classList.contains('inactive'))
-                {
+                if (accion.classList.contains('inactive')) {
                     inputPass.type = "text"
                     accion.classList.remove('inactive')
                     accion.classList.add('active')
 
                     accion.textContent = 'Ocultar contraseña';
-                } else if(accion.classList.contains('active')) {
+                } else if (accion.classList.contains('active')) {
                     inputPass.type = "password"
                     accion.classList.remove('active')
                     accion.classList.add('inactive')
@@ -202,7 +208,6 @@
                 }
             });
         });
-
 
         passChange.forEach(button => {
             button.addEventListener('click', (e) => {
@@ -210,15 +215,13 @@
                 let inputPass = e.target.parentNode.parentNode.children[0];
                 let accion = e.target;
 
-
-                if(accion.classList.contains('inactive'))
-                {
+                if (accion.classList.contains('inactive')) {
                     inputPass.type = "text"
                     accion.classList.remove('inactive')
                     accion.classList.add('active')
 
                     accion.textContent = 'Ocultar contraseña';
-                } else if(accion.classList.contains('active')) {
+                } else if (accion.classList.contains('active')) {
                     inputPass.type = "password"
                     accion.classList.remove('active')
                     accion.classList.add('inactive')
@@ -227,6 +230,7 @@
                 }
             });
         });
+
     </script>
 
     <script type="text/javascript">
@@ -250,8 +254,7 @@
             let password_confirm = document.getElementById('confirmar_contraseña')
             let form = document.getElementById('form_create_user');
 
-            if(password.value == password_confirm.value)
-            {
+            if (password.value == password_confirm.value) {
                 console.log('entrar');
                 form.submit();
             } else {
@@ -275,7 +278,7 @@
             let verify_modal_password = document.getElementById('modal_password_verify')
 
 
-            if(password_modal.value === password_confirm_modal.value){
+            if (password_modal.value === password_confirm_modal.value) {
                 form.submit();
             } else {
                 verify_modal_password.style.display = 'block';
@@ -314,9 +317,9 @@
                     let user_info = e.target.parentNode.parentNode.children[1].textContent
 
                     eliminar_user.innerHTML = `
-                        El usuario <strong>${user_info}</strong> sera eliminado. <br>
-                        ¿Esta seguro que desea eliminarlo?
-                    `
+                                                        El usuario <strong>${user_info}</strong> sera eliminado. <br>
+                                                        ¿Esta seguro que desea eliminarlo?
+                                                    `
 
                     let id = e.target.id
                     getUser(id, 'eliminar');
@@ -361,4 +364,28 @@
         }
 
     </script>
+
+    <script>
+        window.onload = function() {
+            $('#table1').addClass('nowrap').dataTable({
+                responsive: true,
+                pageLength: 25,
+                //paging: false,
+                info: false,
+                columnDefs: [{
+                    "targets": [-1],
+                    "orderable": false
+                }],
+                columnDefs: [
+                    {"width": "30%","targets": 0 },
+                    {"width": "30%","targets": 1 },
+                    {"width": "40%","targets": 2 }
+                    ]
+
+            });
+        };
+
+    </script>
+
+
 @endsection
