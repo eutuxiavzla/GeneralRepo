@@ -17,7 +17,8 @@ class UserController extends Controller
     		'name' => $request->name,
     		'email' => $request->email,
     		'password' => Hash::make($request->password),
-    		'role_id' => $request->role_id
+    		'role_id' => $request->role_id,
+            'cms' => true,
     	]);
 
     	return back()->with('message', 'Usuario creado con éxito');

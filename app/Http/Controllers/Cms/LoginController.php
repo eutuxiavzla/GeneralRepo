@@ -26,7 +26,7 @@ class LoginController extends Controller
     	$user = User::where('email', $request->email)->first();
     	if(isset($user))
     	{
-    		if($user->roles->title == 'administrador')
+    		if($user->cms)
     		{
     			if(Hash::check($request->password, $user->password))
     			{

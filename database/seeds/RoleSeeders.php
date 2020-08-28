@@ -15,5 +15,10 @@ class RoleSeeders extends Seeder
         	'title' => 'administrador',
         	'description' => 'Este usuario cuenta con permisos de super usuario'
         ]);
+
+        DB::table('roles')->insert([
+            'title' => 'editor',
+            'description' => 'Este usuario cuenta con permisos de edicion de landing'
+        ]);
     }
 }

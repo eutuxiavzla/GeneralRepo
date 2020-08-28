@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class AdminCheck
+class LandingCheck
 {
     /**
      * Handle an incoming request.
@@ -15,13 +15,6 @@ class AdminCheck
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user())
-        {
-            if(auth()->user()->roles->title == 'administrador'){
-                return $next($request);
-            }
-        }
-
-        return redirect('/cms');
+        return $next($request);
     }
 }

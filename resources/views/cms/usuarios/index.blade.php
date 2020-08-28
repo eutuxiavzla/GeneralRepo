@@ -13,14 +13,14 @@
             <div class="row">
                 <h4 class="col-12">Crear usuarios</h4>
                 <div class="col-md-4 form-group px-1">
-                    <input class="form-control " type="text" name="name" placeholder="Nombre" autocomplete="off" required>
+                    <input class="form-control" id="create_user_name" type="text" name="name" placeholder="Nombre" autocomplete="off" required>
                 </div>
                 <div class="col-md-4 form-group px-1">
-                    <input class="form-control " type="email" name="email" placeholder="Email" autocomplete="off" required>
+                    <input class="form-control" id="create_user_email" type="email" name="email" placeholder="Email" autocomplete="off" required>
                 </div>
                 <div class="col-md-4 form-group px-1">
-                    <select class="form-control" name="role_id">
-                        <option>Seleccionar rol</option>
+                    <select id="create_rol" class="form-control" name="role_id">
+                        <option value="0">Seleccionar rol</option>
                         @foreach ($roles as $rol)
                             <option value="{{ $rol->id }}">{{ $rol->title }}</option>
                         @endforeach
@@ -42,6 +42,10 @@
                 <small id="emailHelp" style="display: none;" class="form-text text-danger col-12 px-1">Las contraseñas no coinciden.</small>
             </div>
         </form>
+
+        <div id="errors_container" style="display: none;" class="alert alert-danger">
+            
+        </div>
 
         @if (session('message'))
             <div class="alert alert-success" role="alert">
@@ -169,6 +173,16 @@
     </div>
 
     <script type="text/javascript">
+
+
+
+
+
+
+
+    //---------------Permitir mostrar la contraseña escrita------------
+
+
         let passChange = document.querySelectorAll('.pass_watcher');
 
         let modalPassChange = document.querySelectorAll('.modal_change_input');
@@ -176,7 +190,7 @@
 
 
 
-
+        //---------------Funcion permitir mostrar la contraseña escrita del modal cambio de contraseña------------
         modalPassChange.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -204,6 +218,8 @@
         });
 
 
+
+        //---------------Funcion para permitir mostrar la contraseña escrita------------
         passChange.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -227,9 +243,21 @@
                 }
             });
         });
+
     </script>
 
+
+
+
+
+
+
+
+
     <script type="text/javascript">
+
+        //---------------BOTONES Y INPUTS------------
+
         let editarButtons = document.querySelectorAll('.editar');
         let passButtons = document.querySelectorAll('.change_pass');
         let eliminarButtons = document.querySelectorAll('.eliminar');
@@ -246,27 +274,67 @@
 
         submitUserCreate.addEventListener('click', (e) => {
             e.preventDefault();
+
             let password = document.getElementById('contraseña')
             let password_confirm = document.getElementById('confirmar_contraseña')
+            let name = document.getElementById('create_user_name')
+            let email = document.getElementById('create_user_email')
+            let rol = document.getElementById('create_rol')
+
             let form = document.getElementById('form_create_user');
 
-            if(password.value == password_confirm.value)
+            let container = document.getElementById('errors_container');
+            let errors = [];
+
+            container.style.display = 'none';
+            container.innerHTML = '';
+
+
+            //----------VERIFICACION CAMPOS FORM--------------
+
+
+            if(password.value != password_confirm.value)
+            {
+                errors.push('Las contraseñas no coinciden')
+            }if(name.value == '') {
+                errors.push('Debe agregar un nombre')
+            }if(email.value == ''){
+                errors.push('Debe agregar un email')
+            }if(rol.selectedIndex === 0){
+                errors.push('Debe ecoger un rol')
+            }if(password.value == ''){
+                errors.push('Debe agregar una contraseña')
+            }
+
+            if(errors.length === 0 )
             {
                 console.log('entrar');
                 form.submit();
             } else {
-                alert_passwords.style.display = 'block';
+                let errors_main = document.createElement('ul');
+
+                errors.forEach(error => {
+                    errors_main.innerHTML += `
+                        <li>${error}</li>
+                    `;
+                });
+
+                container.appendChild(errors_main);
+                container.style.display = 'block'
             }
 
         });
 
 
+        //--------------- SUBMIT MODAL ELIMINAR ------------
 
         deleteSubmit.addEventListener('click', (e) => {
             let form = document.getElementById('eliminar_form');
 
             form.submit();
         });
+
+        //--------------- SUBMIT MODAL CAMBIAR CONTRASEÑA ------------
 
         passSubmit.addEventListener('click', (e) => {
             let form = document.getElementById('contraseña_form')
@@ -282,11 +350,16 @@
             }
         });
 
+        //--------------- SUBMIT MODAL EDITAR ATOS USUARIO ------------
+
         editarSubmit.addEventListener('click', (e) => {
             let form = document.getElementById('editar_form')
 
             form.submit();
         });
+
+
+        //--------------- BOTON LLAMADO AL MODAL DE EDITAR ------------
 
         if (editarButtons) {
             editarButtons.forEach(button => {
@@ -297,6 +370,8 @@
             });
         }
 
+        //--------------- BOTON LLAMADO AL MODAL DE CAMBIAR CONTRASEÑA ------------
+
         if (passButtons) {
             passButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
@@ -305,6 +380,8 @@
                 })
             });
         }
+
+        //--------------- BOTON LLAMADO AL MODAL DE ELIMINAR USUARIO ------------
 
         if (eliminarButtons) {
             eliminarButtons.forEach(buttons => {
@@ -323,7 +400,10 @@
                 });
             });
         }
+//--------------- FUCIONES DE LOS MODALES ------------
 
+
+        //--------------- FUNCION PARA OBTENER DATOS DEL USUARIO ------------
         function getUser(id, accion) {
             axios.get(`/cms/get/user/${id}`)
                 .then(response => {
@@ -337,6 +417,8 @@
                 });
         }
 
+        //--------------- FUCION PARA ACTUALIZAR FORM MODAL ELIMINAR USUARIO ------------
+
         function eliminarModal(id) {
             let form = document.getElementById('eliminar_form')
 
@@ -344,11 +426,15 @@
 
         }
 
+        //--------------- FUCION PARA ACTUALIZAR FORM MODAL CAMBIAR CONTRASEÑA ------------
+
         function contraseñaModal(id) {
             let form = document.getElementById('contraseña_form')
 
             form.action = `/cms/password/user/${id}`;
         }
+
+        //--------------- FUCION PARA ACTUALIZAR FORM MODAL EDITAR USUARIO ------------
 
         function editarModal(data) {
             let name = document.getElementById('editar_name');
