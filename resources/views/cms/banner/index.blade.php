@@ -5,6 +5,9 @@
 
 
 @section('content')
+	<div class="alert alert-danger" style="display: none;" id="error_container">
+		
+	</div>
 	@if(session('error'))
 	    <div class="alert alert-danger my-4" role="alert">
 	      {{session('error')}}
@@ -29,7 +32,7 @@
 				<div>
 					<form action="{{route('banners.logo')}}" method="POST" id="form_logo"  enctype="multipart/form-data">
 						@csrf
-						<input type="file" name="image" class="image_file">
+						<input type="file" name="image" id="file_image" class="image_file">
 					</form>
 				</div>
 				<div>
@@ -113,11 +116,42 @@
 		let image = document.getElementById('logo_image');
 
 		let guardarSubmit = document.getElementById('guardar_submit'),
+			errors = document.getElementById('error_container'),
+			logoFile = document.getElementById('file_image'),
 			formImage = document.getElementById('form_logo');
 
 
 		guardarSubmit.addEventListener('click', () => {
-			formImage.submit();
+
+			let alerts = [];
+
+			errors.innerHTML = ''
+			errors.style.display = 'none'
+
+
+			if(logoFile.files.length <= 0){
+				alerts.push('Debes cargar un logo');
+			}
+
+			if(alerts.length > 0){
+				let alertsMain = document.createElement('ul')
+
+				alerts.forEach(alert => {
+					alertsMain.innerHTML += `
+						<li>${alert}</li>
+
+					`
+				});
+
+
+				errors.appendChild(alertsMain);
+				errors.style.display = 'block';
+
+			} else {
+				formImage.submit();
+			}
+
+			
 		});
 
 
