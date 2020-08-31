@@ -21,6 +21,7 @@ class HomeController extends Controller
     public function lading()
     {
         $sliders = Logo_Banner::where('tipo', 'banner')->where('status', 1)->get();
-        return view('landing', compact('sliders'));
+        $logo = Logo_Banner::where('tipo', 'logo')->first();
+        return view('landing', compact('sliders', 'logo'));
     }
 }
