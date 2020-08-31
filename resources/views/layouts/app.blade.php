@@ -28,7 +28,7 @@
 
                 <a class="navbar-brand" href="{{ url('/') }}">
                     @if(isset($logo))
-                    <img src="{{asset('storage/'.$logo->image)}}" width="40" height="40" alt="logo">
+                        <img src="{{asset('storage/'.$logo->image)}}" width="40" height="40" alt="logo">
                     @else
                         LOGO
                     @endif
