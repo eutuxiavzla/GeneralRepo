@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@lading')->name('home');
 
+Route::get('/nosotros', 'HomeController@nosotros')->name('nosotros');
+
 Auth::routes();
 
 /*---------------Login --------------*/
@@ -43,8 +45,12 @@ Route::middleware('admin')->group(function () {
 });
 
 /*---------------EDITORES LANDING PAGE CMS--------------*/
+
+
 Route::middleware('landing')->group(function () {
 	
+	/*--------------- VISTA BANNERS/LOGO --------------*/
+
 	Route::get('/cms/banners', 'Cms\LogoBannerController@index')->name('banners.home');
 	Route::get('/cms/crear/banner', 'Cms\LogoBannerController@crearBanner')->name('banners.create');
 	Route::get('/cms/editar/banner/{id}', 'Cms\LogoBannerController@editarBanner')->name('banners.show');
@@ -58,4 +64,21 @@ Route::middleware('landing')->group(function () {
 	//ocultar/activar banners
 	Route::get('/cms/activar/banner/{id}', 'Cms\LogoBannerController@activarBanner')->name('banners.active');
 	Route::get('/cms/ocultar/banner/{id}', 'Cms\LogoBannerController@ocultarBanner')->name('banners.desactive');
+
+
+
+
+	/*--------------- VISTA NOSOTROS --------------*/
+
+	Route::get('/cms/nosotros', 'Cms\NosotrosController@index')->name('nosotros.home');
+	Route::get('/cms/nosotros/crear', 'Cms\NosotrosController@crearNosotros')->name('nosotros.create');
+	Route::get('/cms/nosotros/editar/{id}', 'Cms\NosotrosController@editarNosotros')->name('nosotros.show');
+
+	//crear y eliminar
+	Route::post('/cms/nosotros/guardar', 'Cms\NosotrosController@guardarNosotros')->name('nosotros.store');
+	Route::post('/cms/nosotros/actualizar/{id}', 'Cms\NosotrosController@actualizarNosotros')->name('nosotros.update');
+	Route::post('/cms/nosotros/eliminar/{id}', 'Cms\NosotrosController@eliminarSeccion');
+
+
+
 });

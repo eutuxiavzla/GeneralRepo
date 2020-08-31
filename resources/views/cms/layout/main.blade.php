@@ -103,6 +103,9 @@
                             <li class="acordeon_item">
                               <a href="{{route('banners.home')}}" class="nav-link">Home</a>
                             </li>
+                            <li class="acordeon_item">
+                              <a href="{{route('nosotros.home')}}" class="nav-link">Nosotros</a>
+                            </li>
                           </ul>
                         </li>
                         @endif
